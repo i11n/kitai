@@ -1,0 +1,15 @@
+//  Copyright 2021 IntegerEleven. All rights reserved. MIT license.
+
+import { getTestSuite } from "../_common.ts";
+import type { IAnonymousObject, TTestCtor } from "../interfaces.ts";
+
+export function TestCase(...argsList: (unknown[] | null | undefined)[]) {
+  return (
+    target: IAnonymousObject,
+    propertyKey: string | symbol,
+  ) => {
+    const runner = getTestSuite(target.constructor as TTestCtor);
+    const test = runner.test(String(propertyKey));
+    argsList.reverse().forEach((args) => test.addTestCase(args || []));
+  };
+}
